@@ -1,0 +1,31 @@
+# OpenAI Agents SDK
+
+> The OpenAI Agents SDK is a Python framework for building AI agents that can use tools, make decisions, and complete complex tasks. It provides a structured way to create agents that can use function calling, hosted tools, and even other agents as tools.
+
+The SDK is designed to help developers create AI agents that can:
+- Take actions through tools (fetching data, running code, calling APIs)
+- Make decisions based on context and instructions
+- Handle complex workflows through tool composition
+- Manage state and error handling
+- Stream results and provide tracing capabilities
+
+## Core Documentation
+
+- [Introduction](https://openai.github.io/openai-agents-python/index.html.md): Overview of the OpenAI Agents SDK and its capabilities
+- [Quickstart Guide](https://openai.github.io/openai-agents-python/quickstart/index.html.md): Get started quickly with basic agent creation and usage
+- [Agents Guide](https://openai.github.io/openai-agents-python/agents/index.html.md): Detailed information about creating and configuring agents
+- [Tools Documentation](https://openai.github.io/openai-agents-python/tools/index.html.md): Comprehensive guide to using and creating tools
+- [Running Agents](https://openai.github.io/openai-agents-python/running/index.html.md): How to execute and manage agent runs
+
+## Advanced Features
+
+- [Context Management](https://openai.github.io/openai-agents-python/context/index.html.md): Managing state and context in agent runs
+- [Tracing](https://openai.github.io/openai-agents-python/tracing/index.html.md): Debugging and monitoring agent behavior
+- [Guardrails](https://openai.github.io/openai-agents-python/guardrails/index.html.md): Setting up safety and control mechanisms
+- [Voice Agents](https://openai.github.io/openai-agents-python/voice/index.html.md): Building agents with voice capabilities
+
+## Optional
+
+- [API Reference](https://openai.github.io/openai-agents-python/ref/index.html.md): Complete API documentation for all SDK components
+- [Examples](https://openai.github.io/openai-agents-python/examples/index.html.md): Sample code and use cases
+- [Configuration](https://openai.github.io/openai-agents-python/config/index.html.md): Detailed SDK configuration options

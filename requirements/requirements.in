@@ -1,0 +1,5 @@
+ipykernel
+openai-agents
+openai-agents[viz]
+asyncio
+matplotlib
