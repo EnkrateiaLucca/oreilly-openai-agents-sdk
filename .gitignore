@@ -1,0 +1,228 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Credentials and API Keys
+credentials.json
+*.json.key
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.json
+secrets.json
+api_keys.txt
+*.pem
+*.key
+*.crt
+*.p12
+
+# Google Cloud
+gcloud/
+.config/gcloud/
+service-account*.json
+google-cloud-keyfile.json
+google_credentials.json
+
+# OpenAI and AI Services
+openai_api_key.txt
+openai.key
+anthropic_api_key.txt
+.anthropic
+.openai
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Conda
+.conda/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Data files (potentially sensitive)
+data/
+datasets/
+*.csv
+*.xlsx
+*.json
+!requirements*.json
+!package*.json
+!tsconfig.json
+!*config*.json
+!setup.json
+
+# Model files and caches
+models/
+.cache/
+cached_*
+*.pkl
+*.pickle
+*.model
+
+# Training outputs
+runs/
+wandb/
+mlruns/
+tensorboard_logs/
+
+# Local configuration
+local_settings.py
+local_config.py
+settings_local.py
+
+# MCP Server configs that might contain sensitive info
+mcp_config.json
+server_config.json
+
+# Tracing and monitoring
+traces/
+*.trace
+
+# Personal notes and TODO files (but keep project docs)
+personal_notes.md
+TODO.md
+NOTES.md
