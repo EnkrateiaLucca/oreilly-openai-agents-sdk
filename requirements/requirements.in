@@ -1,6 +1,7 @@
 ipykernel
 openai-agents
 openai-agents[viz]
+openai-agents[voice]
 asyncio
 matplotlib
 pandas
@@ -10,3 +11,4 @@ google-api-python-client
 google-auth
 google-auth-oauthlib
 google-auth-httplib2
+sounddevice
