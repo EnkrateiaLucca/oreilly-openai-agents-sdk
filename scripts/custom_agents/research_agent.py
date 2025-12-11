@@ -248,8 +248,8 @@ if __name__ == "__main__":
     # Example topics
     example_topics = [
         "LLM context windows and their limitations",
-        "Best productivity apps for time blocking in 2024",
-        "Latest developments in AI agents"
+        "Best AI Tools for productivity in 2025",
+        "Latest developments consumer agents"
     ]
 
     # Run research on the first topic
