@@ -155,6 +155,8 @@ anthropic_api_key.txt
 
 # Database
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 *.sqlite3
 
