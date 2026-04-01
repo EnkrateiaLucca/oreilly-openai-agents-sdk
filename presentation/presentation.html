@@ -4,68 +4,434 @@
     <title>Getting Started with OpenAI Agents SDK</title>
     <meta charset="utf-8">
     <style>
-      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
-      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-      body { font-family: 'Droid Serif'; }
-      h1, h2, h3 {
-        font-family: 'Yanone Kaffeesatz';
-        font-weight: normal;
+      /* ── Brand Foundation ── */
+      :root {
+        --ink: #000000;
+        --cream: #F5F3EB;
+        --coral: #E86B5A;
+        --golden: #F5C542;
+        --sage: #7CB56B;
+        --sky: #5B9BD5;
+        --coral-light: #FBEAE7;
+        --golden-light: #FEF8E6;
+        --sage-light: #EEF5EC;
+        --sky-light: #E8F1F9;
+        --gray-100: #F5F4F1;
+        --gray-300: #DDD9D2;
+        --gray-500: #8A847A;
+        --gray-600: #5C5750;
+        --gray-800: #2A2825;
       }
-      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      body {
+        font-family: 'IBM Plex Sans', Arial, sans-serif;
+        color: var(--gray-800);
+      }
+
+      /* ── Slide Defaults ── */
+      .remark-slide-content {
+        background-color: var(--cream);
+        padding: 40px 60px;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      h1 {
+        font-family: 'IBM Plex Sans', Arial, sans-serif;
+        font-weight: 700;
+        font-size: 36px;
+        color: var(--ink);
+        margin-bottom: 16px;
+        line-height: 1.2;
+      }
+
+      h2 {
+        font-family: 'IBM Plex Sans', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: var(--ink);
+        margin-bottom: 12px;
+        line-height: 1.3;
+      }
+
+      h3 {
+        font-family: 'IBM Plex Sans', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 20px;
+        color: var(--gray-600);
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+
+      p, li {
+        font-size: 18px;
+        line-height: 1.6;
+        color: var(--gray-800);
+      }
+
+      a {
+        color: var(--sky);
+        text-decoration: none;
+        border-bottom: 1px solid var(--sky);
+      }
+
+      a:hover {
+        color: var(--coral);
+        border-bottom-color: var(--coral);
+      }
+
+      strong {
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* ── Code Styling ── */
+      .remark-code, .remark-inline-code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+      }
+
+      .remark-inline-code {
+        background: white;
+        border: 1px solid var(--gray-300);
+        padding: 2px 6px;
+        font-size: 16px;
+      }
+
+      .remark-code {
+        background: white;
+        border: 2px solid var(--ink);
+        padding: 16px;
+        line-height: 1.5;
+      }
+
+      /* ── Cover Slide ── */
+      .cover {
+        background: var(--ink);
+        color: white;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 60px;
+      }
+      .cover h1 {
+        color: white;
+        font-size: 44px;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+      }
+      .cover h2 {
+        color: var(--golden);
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+      .cover h3 {
+        color: var(--gray-300);
+        font-weight: 400;
+        font-size: 18px;
+      }
+      .cover .brand-bar {
+        display: flex;
+        gap: 0;
+        margin: 32px auto 24px;
+        width: 320px;
+        height: 6px;
+      }
+      .cover .brand-bar span {
+        flex: 1;
+        display: block;
+      }
+
+      /* ── Section Divider ── */
+      .section {
+        background: var(--ink);
+        color: white;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .section h1 {
+        color: white;
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+      .section h3 {
+        color: var(--gray-300);
+        font-weight: 400;
+        font-size: 20px;
+      }
+
+      /* ── Demo Slide ── */
+      .demo {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .demo-badge {
+        display: inline-block;
+        background: var(--sage);
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 8px 20px;
+        margin-bottom: 20px;
+      }
+      .demo h1 {
+        font-size: 32px;
+      }
+
+      /* ── Callout Boxes ── */
+      .callout {
+        background: white;
+        border: 2px solid var(--ink);
+        border-left: 4px solid var(--sky);
+        padding: 16px 20px;
+        margin: 16px 0;
+      }
+      .callout.tip {
+        border-left-color: var(--golden);
+      }
+      .callout.success {
+        border-left-color: var(--sage);
+      }
+      .callout.alert {
+        border-left-color: var(--coral);
+      }
+
+      /* ── Card Grid ── */
+      .card-row {
+        display: flex;
+        gap: 24px;
+        margin: 16px 0;
+      }
+      .card {
+        background: white;
+        border: 2px solid var(--ink);
+        padding: 20px;
+        flex: 1;
+      }
+      .card h3 {
+        margin-top: 0;
+        font-size: 18px;
+      }
+
+      /* ── Accent Underline ── */
+      .accent-coral { border-bottom: 3px solid var(--coral); padding-bottom: 4px; }
+      .accent-golden { border-bottom: 3px solid var(--golden); padding-bottom: 4px; }
+      .accent-sage { border-bottom: 3px solid var(--sage); padding-bottom: 4px; }
+      .accent-sky { border-bottom: 3px solid var(--sky); padding-bottom: 4px; }
+
+      /* ── Badge / Tag ── */
+      .tag {
+        display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 4px 12px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        color: white;
+      }
+      .tag-coral { background: var(--coral); }
+      .tag-golden { background: var(--golden); color: var(--ink); }
+      .tag-sage { background: var(--sage); }
+      .tag-sky { background: var(--sky); }
+
+      /* ── Footnote ── */
+      .footnote {
+        position: absolute;
+        bottom: 24px;
+        left: 60px;
+        right: 60px;
+        font-size: 13px;
+        color: var(--gray-500);
+        border-top: 1px solid var(--gray-300);
+        padding-top: 8px;
+      }
+      .footnote a {
+        color: var(--gray-500);
+        border-bottom-color: var(--gray-300);
+      }
+
+      /* ── Quote ── */
+      blockquote {
+        border-left: 4px solid var(--golden);
+        margin: 20px 0;
+        padding: 12px 24px;
+        background: var(--golden-light);
+        font-style: italic;
+        color: var(--gray-600);
+      }
+      blockquote p {
+        margin: 0;
+        color: var(--gray-600);
+      }
+
+      /* ── Image styling ── */
+      img {
+        max-width: 100%;
+      }
+
+      /* ── List styling ── */
+      ul {
+        padding-left: 24px;
+      }
+      li {
+        margin-bottom: 6px;
+      }
+
+      /* ── Table styling ── */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      th {
+        background: var(--ink);
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 10px 16px;
+        text-align: left;
+      }
+      td {
+        border-bottom: 1px solid var(--gray-300);
+        padding: 10px 16px;
+        font-size: 16px;
+      }
+      tr:nth-child(even) td {
+        background: var(--gray-100);
+      }
+
+      /* ── Two Column Layout ── */
+      .cols {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+      }
+      .cols .col {
+        flex: 1;
+      }
+
+      /* ── Progress indicator line ── */
+      .remark-slide-content::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(to right, var(--coral), var(--golden), var(--sage), var(--sky));
+      }
+
+      .section::after, .cover::after {
+        background: none;
+      }
+
+      /* ── Number circle ── */
+      .num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: var(--ink);
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 16px;
+        margin-right: 8px;
+        flex-shrink: 0;
+      }
     </style>
   </head>
   <body>
     <textarea id="source">
 
-class: center, middle, inverse
+class: cover
 
-# Getting Started with OpenAI Agents SDK
+# Getting Started with<br>OpenAI Agents SDK
+
+<div class="brand-bar">
+  <span style="background: #E86B5A"></span>
+  <span style="background: #F5C542"></span>
+  <span style="background: #7CB56B"></span>
+  <span style="background: #5B9BD5"></span>
+</div>
 
 ## Lucas Soares
 
-### 08/27/2025
-
-.footnote[O'Reilly Live Training]
+### O'Reilly Live Training
 
 ---
 
-# Agenda
+# Course Agenda
 
-1. **Evolution: From LLMs to Agents**
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px;">
 
---
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">1</span>
+  <span><strong>From LLMs to Agents</strong></span>
+</div>
 
-2. **OpenAI Agents SDK Core Concepts**
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">2</span>
+  <span><strong>The Agent Loop</strong></span>
+</div>
 
---
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">3</span>
+  <span><strong>Agents, Tools & Functions</strong></span>
+</div>
 
-3. **Building Your First Agent**
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">4</span>
+  <span><strong>Structured Output & Context</strong></span>
+</div>
 
---
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">5</span>
+  <span><strong>Multi-Agent Patterns & Handoffs</strong></span>
+</div>
 
-4. **Tools & Function Calling**
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">6</span>
+  <span><strong>Guardrails, Sessions & Tracing</strong></span>
+</div>
 
---
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">7</span>
+  <span><strong>MCP (Model Context Protocol)</strong></span>
+</div>
 
-5. **MCP (Model Context Protocol) Tools**
+<div style="display: flex; align-items: center; width: 48%; margin-bottom: 8px;">
+  <span class="num">8</span>
+  <span><strong>Capstone: Customer Service Agent</strong></span>
+</div>
 
---
+</div>
 
-6. **Handoffs, Tracing & Context**
-
---
-
-7. **Guardrails & Multi-Agent Systems**
-
---
-
-8. **Hands-on Demo & Q&A**
+.footnote[Notebooks 00 through 05 &mdash; sequential, hands-on progression]
 
 ---
 
-class: inverse, center, middle
+class: section
 
 # From LLMs to Agents
 
@@ -73,200 +439,221 @@ class: inverse, center, middle
 
 ---
 
-class: center, middle
-
 # LLMs vs Agents
 
-<div style="text-align: center;">
-  <img src="../assets/llm-vs-agent.png" alt="LLM vs Agent Comparison" style="width: 70%;">
+<div style="text-align: center; margin: 20px 0;">
+  <img src="../assets/llm-vs-agent.png" alt="LLM vs Agent Comparison" style="width: 65%; border: 2px solid #000;">
 </div>
-
----
-
-# Key Differences
-
-## LLMs: Text Generation
-- Input text → Process → Output text
-- Stateless operations
-- No external interactions
-
-## Agents: Action & Decision Making
-- Perceive → Decide → Act → Learn
-- Maintain state across interactions
-- Use tools to interact with world
 
 .footnote[Source: [OpenAI Agents Documentation](https://openai.github.io/openai-agents-python/)]
 
 ---
 
-# Why Agents Matter
+# Key Differences
 
-<div style="display: flex; align-items: center; gap: 20px;">
-  <div style="flex: 1;">
-    <h3>Capabilities</h3>
-    <ul>
-      <li>Use tools & APIs</li>
-      <li>Make decisions</li>
-      <li>Complete workflows</li>
-      <li>Maintain state</li>
-    </ul>
-  </div>
-  <div style="flex: 1;">
-    <h3>Impact</h3>
-    <ul>
-      <li>Task automation</li>
-      <li>Real-time data access</li>
-      <li>Error handling</li>
-      <li>Adaptive behavior</li>
-    </ul>
-  </div>
+<div class="cols">
+<div class="col">
+
+### LLMs: Text In &rarr; Text Out
+
+- Input text &rarr; Process &rarr; Output text
+- **Stateless** operations
+- No external interactions
+- Single turn completion
+
+</div>
+<div class="col">
+
+### Agents: Perceive &rarr; Decide &rarr; Act
+
+- Maintain **state** across interactions
+- Use **tools** to interact with the world
+- Make autonomous **decisions**
+- Execute multi-step **workflows**
+
+</div>
 </div>
 
 > "Agents transform AI from conversational to operational"
 
 ---
 
-class: inverse, center, middle
+# Why Agents Matter
+
+<div class="card-row">
+<div class="card">
+  <h3 style="border-bottom: 3px solid #E86B5A; padding-bottom: 4px;">Capabilities</h3>
+  <ul>
+    <li>Use tools & APIs</li>
+    <li>Make decisions autonomously</li>
+    <li>Complete end-to-end workflows</li>
+    <li>Maintain state across runs</li>
+  </ul>
+</div>
+<div class="card">
+  <h3 style="border-bottom: 3px solid #5B9BD5; padding-bottom: 4px;">Impact</h3>
+  <ul>
+    <li>Task automation at scale</li>
+    <li>Real-time data access</li>
+    <li>Intelligent error handling</li>
+    <li>Adaptive behavior</li>
+  </ul>
+</div>
+</div>
+
+---
+
+class: section
+
+# The Agent Loop
+
+### How Agents Think and Act
+
+---
+
+# The Agent Loop Explained
+
+The agent loop is the core execution cycle that powers every agent:
+
+<div style="text-align: center; margin: 16px 0;">
+  <div style="display: inline-flex; gap: 0; align-items: center;">
+    <div style="background: #E86B5A; color: white; padding: 12px 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 14px;">RECEIVE INPUT</div>
+    <div style="font-size: 24px; padding: 0 8px;">&rarr;</div>
+    <div style="background: #F5C542; color: #000; padding: 12px 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 14px;">LLM DECIDES</div>
+    <div style="font-size: 24px; padding: 0 8px;">&rarr;</div>
+    <div style="background: #7CB56B; color: white; padding: 12px 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 14px;">TOOL CALLS</div>
+    <div style="font-size: 24px; padding: 0 8px;">&rarr;</div>
+    <div style="background: #5B9BD5; color: white; padding: 12px 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 14px;">FINAL OUTPUT</div>
+  </div>
+</div>
+
+The loop continues until the LLM produces a **final output** (no more tool calls) or a **handoff** to another agent.
+
+<div class="callout tip">
+  <strong>Key Insight:</strong> The agent loop is what separates agents from simple LLM calls. It allows for multi-step reasoning and tool use.
+</div>
+
+.footnote[Notebook 00 &mdash; Agent Loop Fundamentals]
+
+---
+
+# Agent Loop in Code
+
+```python
+from agents import Agent, Runner
+
+# The simplest agent loop
+agent = Agent(
+    name="Assistant",
+    instructions="You are a helpful assistant",
+    model="gpt-4o-mini"
+)
+
+# Runner.run_sync() manages the agent loop for you
+result = Runner.run_sync(agent, "Write a haiku about recursion")
+print(result.final_output)
+```
+
+**What happens under the hood:**
+1. Input is sent to the LLM with agent instructions
+2. LLM decides whether to use tools or produce output
+3. If tools are called, results are fed back &rarr; loop continues
+4. When LLM produces final text &rarr; loop ends
+
+.footnote[Notebook 00 &mdash; Agent Loop Fundamentals]
+
+---
+
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Building Your First Agent
+
+Notebook `00-the-agent-loop.ipynb`
+
+---
+
+class: section
 
 # OpenAI Agents SDK
 
 ### Core Architecture & Concepts
 
 ---
-class: center, middle
 
-<div style="text-align: center;">
-  <img src="../assets/sdk-architecture.png" alt="SDK Architecture" style="width: 50%;">
+# SDK Architecture
+
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/sdk-architecture.png" alt="SDK Architecture" style="width: 50%; border: 2px solid #000;">
 </div>
-
----
-
-# Core Components
-
-- **Agent**
-
-  - The intelligent core with instructions and model
-
---
-
-- **Tools  **
-
-  - External capabilities (functions, APIs, other agents)
-
---
-
-- **Runner**
-
-  - Execution engine for agent interactions
-
---
-
-- **Context**
-
-  - State management across runs
 
 .footnote[Source: [SDK Quickstart Guide](https://openai.github.io/openai-agents-python/quickstart/)]
 
 ---
 
-# Three Essential Patterns
+# Core Components
 
-## 1. Basic Agent Creation
-```python
-from agents import Agent
-
-agent = Agent(
-    name="Assistant",
-    instructions="You are a helpful assistant",
-    model="gpt-4o-mini"
-)
-```
-
-## 2. Tool Definition
-```python
-from agents import function_tool
-
-@function_tool
-def get_weather(city: str) -> str:
-    """Get weather for a city"""
-    return f"Weather data for {city}"
-```
+| Component | Role | Key Import |
+|-----------|------|------------|
+| **Agent** | The intelligent core with instructions and model | `from agents import Agent` |
+| **Tools** | External capabilities (functions, APIs, MCP) | `from agents import function_tool` |
+| **Runner** | Execution engine that manages the agent loop | `from agents import Runner` |
+| **Context** | State management across runs | `from agents import RunContextWrapper` |
+| **Guardrails** | Input/output validation & safety | `from agents import InputGuardrail` |
+| **Handoffs** | Delegation between specialized agents | `agent.handoffs=[...]` |
 
 ---
 
-# Three Essential Patterns (cont.)
+# Three Execution Methods
 
-## 3. Execution Methods
-
-### Synchronous
 ```python
-result = Runner.run_sync(agent, "Hello")
+from agents import Agent, Runner
+
+agent = Agent(name="Assistant", instructions="Be helpful", model="gpt-4o-mini")
 ```
 
-### Asynchronous
+<div class="card-row">
+<div class="card">
+  <h3><span class="tag tag-coral">Sync</span></h3>
+
 ```python
-result = await Runner.run(agent, "Hello")
+result = Runner.run_sync(
+    agent, "Hello"
+)
 ```
 
-### Streaming
+Best for scripts & notebooks
+</div>
+<div class="card">
+  <h3><span class="tag tag-sage">Async</span></h3>
+
 ```python
-async for event in Runner.run_streamed(agent, "Hello"):
-    print(event.delta, end="")
+result = await Runner.run(
+    agent, "Hello"
+)
 ```
+
+Best for production apps
+</div>
+<div class="card">
+  <h3><span class="tag tag-sky">Streaming</span></h3>
+
+```python
+result = Runner.run_streamed(
+    agent, "Hello"
+)
+```
+
+Best for real-time UX
+</div>
+</div>
 
 .footnote[Source: [Running Agents Guide](https://openai.github.io/openai-agents-python/running/)]
 
 ---
 
-class: inverse, center, middle
-
-# Building Agents
-
-### From Simple to Complex
-
----
-
-# Your First Agent
-
-```python
-from agents import Agent, Runner
-
-# Create an agent
-agent = Agent(
-    name="MyFirstAgent",
-    instructions="You are a helpful assistant",
-    model="gpt-4o-mini"  # Cost-effective model
-)
-
-# Run synchronously
-result = Runner.run_sync(
-    agent, 
-    "Write a haiku about recursion"
-)
-
-print(result.final_output)
-```
-
-Output:
-```
-Recursion calls itself,
-Depth within depth, it descends—
-Base case brings it home.
-```
-
----
-
-class: center, middle
-
-<h1>
-<span style="background-color: lightgreen">
- Demo: Building Your First Agent
-</span>
-</h1>
-
----
-
-class: inverse, center, middle
+class: section
 
 # Tools & Functions
 
@@ -274,30 +661,55 @@ class: inverse, center, middle
 
 ---
 
-## Built-in Tools
+# Types of Tools
+
+<div class="cols">
+<div class="col">
+
+### Built-in Tools
+
 ```python
-from agents.tools import WebSearchTool, FileSearchTool
+from agents.tools import (
+    WebSearchTool,
+    FileSearchTool
+)
 
 web_tool = WebSearchTool(
-    user_location={"type": "approximate", "city": "NYC"}
+    user_location={
+        "type": "approximate",
+        "city": "NYC"
+    }
 )
 ```
 
-## Custom Function Tools
+For common tasks: web search, file operations
+
+</div>
+<div class="col">
+
+### Custom Function Tools
+
 ```python
+from agents import function_tool
+
 @function_tool
-def calculate(expression: str) -> str:
-    """Evaluate a mathematical expression"""
+def calculate(
+    expression: str
+) -> str:
+    """Evaluate a math expression"""
     return str(eval(expression))
 ```
 
-## When to Use Each
-- **Built-in**: For common tasks (web search, file ops)
-- **Custom**: For domain-specific logic
+For domain-specific logic
+
+</div>
+</div>
+
+.footnote[Notebook 01 &mdash; Agents and Tools]
 
 ---
 
-# Complete Tool Example
+# Building a Complete Tool Agent
 
 ```python
 from agents import Agent, Runner, function_tool
@@ -311,8 +723,9 @@ def get_current_time(timezone: str = "UTC") -> str:
 @function_tool
 def calculate_days(date1: str, date2: str) -> int:
     """Calculate days between two dates"""
-    # Implementation here
-    return days_difference
+    d1 = datetime.strptime(date1, "%Y-%m-%d")
+    d2 = datetime.strptime(date2, "%Y-%m-%d")
+    return abs((d2 - d1).days)
 
 agent = Agent(
     name="TimeKeeper",
@@ -324,9 +737,26 @@ agent = Agent(
 .footnote[Source: [Tools Documentation](https://openai.github.io/openai-agents-python/tools/)]
 
 ---
-# Structured Outputs
 
-## Using Pydantic Models
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Building an Agent with Tools
+
+Notebook `01-agents-and-tools.ipynb`
+
+---
+
+class: section
+
+# Structured Output & Context
+
+### Type-Safe Responses and State Management
+
+---
+
+# Structured Outputs with Pydantic
 
 ```python
 from pydantic import BaseModel
@@ -339,273 +769,40 @@ class UserInfo(BaseModel):
 
 agent = Agent(
     name="DataCollector",
-    instructions="Extract user information",
+    instructions="Extract user information from text",
     model="gpt-4o-mini",
-    output_type=UserInfo  # Structured output
+    output_type=UserInfo  # Forces structured output
 )
 
-result = Runner.run_sync(agent, 
-    "John is 25 and likes coding and hiking")
-# result.final_output is now a UserInfo instance
+result = Runner.run_sync(agent, "John is 25 and likes coding and hiking")
+print(result.final_output.name)       # "John"
+print(result.final_output.interests)  # ["coding", "hiking"]
 ```
 
-.footnote[Source: [Agents Guide](https://openai.github.io/openai-agents-python/agents/)]
-
----
-
-class: inverse, center, middle
-
-# MCP Tools
-
-### Model Context Protocol Integration
-
----
-
-# What is MCP?
-
-## Model Context Protocol
-- **Open protocol** for connecting AI systems to data sources
-- **Standardized interface** for tool integration
-- **Secure context sharing** between applications
-
-## Why MCP with Agents?
-- Access **local and remote resources** seamlessly
-- **Unified tool interface** across different systems
-- **Production-ready integrations** out of the box
-
-> "MCP bridges the gap between AI agents and real-world systems"
-
-.footnote[Source: [MCP Documentation](https://openai.github.io/openai-agents-python/mcp/)]
-
----
-
-# MCP Architecture
-
-<div style="display: flex; gap: 40px; justify-content: center;">
-  <div>
-    <h3>Components</h3>
-    <ul>
-      <li><strong>MCP Servers</strong> - Expose resources</li>
-      <li><strong>MCP Clients</strong> - Consume resources</li>
-      <li><strong>Transport Layer</strong> - Communication</li>
-    </ul>
-  </div>
-  <div>
-    <h3>Resource Types</h3>
-    <ul>
-      <li>Tools (functions)</li>
-      <li>Resources (data)</li>
-      <li>Prompts (templates)</li>
-    </ul>
-  </div>
+<div class="callout">
+<strong>Why structured output?</strong> Guarantees the agent returns data in a predictable schema &mdash; essential for building reliable pipelines.
 </div>
 
-```python
-from agents import Agent
-from agents.tools import MCPServerStdio
-
-# Connect to MCP server
-mcp_server = MCPServerStdio(
-    command="uvx",
-    args=["mcp-server-filesystem", "/Users/data"]
-)
-
-agent = Agent(
-    name="FileAgent",
-    tools=[mcp_server]  # MCP as a tool source
-)
-```
-
----
-
-# Using MCP Tools
-
-## Standard I/O Server
-```python
-from agents.tools import MCPServerStdio
-
-# Filesystem access via MCP
-fs_server = MCPServerStdio(
-    command="npx",
-    args=["-y", "@modelcontextprotocol/server-filesystem", "/home"]
-)
-```
-
-## Streamable HTTP
-```python
-from agents.tools import MCPServerStreamableHttp
-
-# Server-sent events connection
-sse_server = MCPServerStreamableHttp(
-    url="http://localhost:8080/mcp"
-)
-```
-
----
-
-## Examples of Available MCP Servers
-- `mcp-server-filesystem` - File operations
-- `mcp-server-git` - Git repository access
-- `mcp-server-github` - GitHub API integration
-- `mcp-server-sqlite` - Database operations
-
----
-
-# Complete MCP Example
-
-```python
-from agents import Agent, Runner
-from agents.tools import MCPServerStdio
-
-# Setup MCP server for Git operations
-git_server = MCPServerStdio(
-    command="npx",
-    args=["-y", "@modelcontextprotocol/server-git", 
-          "--repository", "/path/to/repo"]
-)
-
-# Create agent with MCP tools
-agent = Agent(
-    name="GitExpert",
-    instructions="Help with git repository analysis",
-    model="gpt-4o-mini",
-    tools=[git_server]  # MCP provides multiple tools
-)
-
-# Use the agent - MCP tools are auto-discovered
-result = Runner.run_sync(
-    agent, 
-    "Show me recent commits and their authors"
-)
-print(result.final_output)
-```
-
-.footnote[Source: [MCP Integration Guide](https://openai.github.io/openai-agents-python/mcp/)]
-
----
-
-class: center, middle
-
-# <h1><span style="background-color: lightgreen">Demo: Building a Simple Research Agent</span></h1>
-
----
-
-class: inverse, center, middle
-
-# Handoffs, Tracing & Context
-
-### Building Stateful Agent Workflows
-
----
-
-# Agent Handoffs
-
-## Delegating to Specialized Agents
-
-<div style="text-align: center;">
-  <img src="../assets/agent-handoffs.png" alt="Agent Handoffs Workflow" style="width: 80%;">
-</div>
-
----
-
-# Handoffs
-
-**Key Benefits:**
-- **Specialization** - Each agent focuses on specific expertise
-- **Scalability** - Add new specialists without changing core logic  
-- **Flexibility** - Dynamic routing based on query analysis
-
----
-
-```python
-from agents import Agent
-
-# Specialized agents
-spanish_agent = Agent(
-    name="SpanishExpert",
-    instructions="You only speak Spanish. Help Spanish speakers."
-)
-
-technical_agent = Agent(
-    name="TechnicalExpert",
-    instructions="You handle technical support queries."
-)
-
-# Router agent with handoffs
-router_agent = Agent(
-    name="Router",
-    instructions="Route queries to the appropriate specialist",
-    handoffs=[spanish_agent, technical_agent]
-)
-```
-
-.footnote[Source: [Handoffs Documentation](https://openai.github.io/openai-agents-python/handoffs/)]
-
----
-
-# Tracing Agent Workflows
-
-## Monitoring Complex Operations
-
-<div style="text-align: center;">
-  <img src="../assets/agent-tracing.png" alt="Agent Tracing Visualization" style="width: 50%;">
-</div>
-
----
-
-# Tracing
-
-**Tracing Benefits:**
-- **Debugging** - See exact execution path and timing
-- **Performance** - Identify bottlenecks in agent workflows
-- **Monitoring** - Track success/failure patterns
-
-```python
-from agents import trace, set_tracing_disabled
-
-# Group related operations with tracing
-async def process_customer_request(query: str):
-    with trace("customer_workflow"):
-        # Initial analysis
-        with trace("analyze"):
-            analysis = await Runner.run(analyzer_agent, query)
-        
-        # Route to specialist
-        with trace("route"):
-            response = await Runner.run(router_agent, analysis)
-        
-        # Format final response
-        with trace("format"):
-            final = await Runner.run(formatter_agent, response)
-        
-        return final
-
-# Disable tracing in production
-set_tracing_disabled(True)
-```
-
-.footnote[Source: [Tracing Guide](https://openai.github.io/openai-agents-python/tracing/)]
+.footnote[Notebook 02 &mdash; Structured Output and Context]
 
 ---
 
 # Context Management
 
-## Maintaining State Across Runs
-
-<div style="text-align: center;">
-  <img src="../assets/context-management.png" alt="Context Management Architecture" style="width: 50%;">
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/context-management.png" alt="Context Management" style="width: 48%; border: 2px solid #000;">
 </div>
 
----
+**Context enables:**
+- **Persistent memory** between agent runs
+- **User sessions** for individual interactions
+- **Shared data** accessible across tools
 
-# Context Management
-
-**Context Capabilities:**
-- **Persistent Memory** - Maintain state between agent runs
-- **User Sessions** - Track individual user interactions
-- **Shared Data** - Access context across multiple tools
+.footnote[Notebook 02 &mdash; Structured Output and Context]
 
 ---
+
+# Context in Practice
 
 ```python
 from agents import RunContextWrapper, function_tool
@@ -621,252 +818,693 @@ async def get_user_history(
     ctx: RunContextWrapper[UserSession]
 ) -> str:
     session = ctx.context
-    return f"User {session.user_id} has {len(session.history)} messages"
+    return f"User {session.user_id}: {len(session.history)} messages"
 
 @function_tool
 async def update_preferences(
     ctx: RunContextWrapper[UserSession],
-    key: str, 
-    value: str
+    key: str, value: str
 ) -> str:
     ctx.context.preferences[key] = value
-    return f"Updated preference: {key}={value}"
+    return f"Updated: {key}={value}"
 ```
 
----
-
-class: center, middle
-
-# <h1><span style="background-color: lightgreen">Demo: Building a Spreadsheet Agent</span></h1>
-
----
-
-class: inverse, center, middle
-
-# Guardrails & Multi-Agent Systems
-
-### Safe and Scalable Agent Architectures
-
----
-
-# Guardrails
-
-## Ensuring Safe Agent Behavior
-
-<div style="text-align: center;">
-  <img src="../assets/agent-guardrails.png" alt="Agent Guardrails Security" style="width: 50%;">
+<div class="callout tip">
+<strong>Tip:</strong> Context objects are typed via generics &mdash; <code>RunContextWrapper[T]</code> ensures your tools receive the correct session type.
 </div>
 
 ---
-# Guardrails
 
-**Security Layers:**
-- **Input Validation** - Filter dangerous or malformed inputs
-- **Output Sanitization** - Remove sensitive information from responses
-- **Rate Limiting** - Prevent abuse and resource exhaustion
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Structured Output & Context in Action
+
+Notebook `02-structured-output-and-context.ipynb`
 
 ---
 
+class: section
+
+# Multi-Agent Patterns
+
+### Handoffs & Orchestration
+
+---
+
+# Agent Handoffs
+
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/agent-handoffs.png" alt="Agent Handoffs" style="width: 75%; border: 2px solid #000;">
+</div>
+
+.footnote[Notebook 03 &mdash; Multi-Agent Patterns (Handoffs)]
+
+---
+
+# Handoffs in Code
+
 ```python
-from agents import input_guardrail, output_guardrail
+from agents import Agent
 
-@input_guardrail
-async def validate_spreadsheet_input(ctx, agent, input_data):
-    # Check for malicious formulas
-    if "=cmd" in input_data.lower() or "=shell" in input_data.lower():
-        raise ValueError("Potentially dangerous formula detected")
-    
-    # Validate data size
-    if len(input_data) > 10000:
-        raise ValueError("Input data too large")
+# Specialized agents
+spanish_agent = Agent(
+    name="SpanishExpert",
+    instructions="You only speak Spanish. Help Spanish speakers."
+)
 
-@output_guardrail  
-async def sanitize_output(ctx, agent, output):
-    # Remove any sensitive patterns
-    import re
-    output = re.sub(r'password["\']?\s*[:=]\s*["\']?[\w]+', 'password=***', output)
-    return output
+technical_agent = Agent(
+    name="TechnicalExpert",
+    instructions="You handle technical support queries."
+)
 
-secure_agent = Agent(
-    name="SecureSpreadsheetAgent",
-    input_guardrails=[validate_spreadsheet_input],
-    output_guardrails=[sanitize_output]
+# Router agent delegates to specialists
+router_agent = Agent(
+    name="Router",
+    instructions="Route queries to the appropriate specialist",
+    handoffs=[spanish_agent, technical_agent]
 )
 ```
 
-.footnote[Source: [Guardrails Documentation](https://openai.github.io/openai-agents-python/guardrails/)]
+<div class="card-row">
+<div class="card" style="border-left: 4px solid #7CB56B;">
+  <strong>Specialization</strong> &mdash; Each agent focuses on specific expertise
+</div>
+<div class="card" style="border-left: 4px solid #5B9BD5;">
+  <strong>Scalability</strong> &mdash; Add new specialists without changing core logic
+</div>
+<div class="card" style="border-left: 4px solid #F5C542;">
+  <strong>Flexibility</strong> &mdash; Dynamic routing based on query analysis
+</div>
+</div>
+
+.footnote[Source: [Handoffs Documentation](https://openai.github.io/openai-agents-python/handoffs/)]
 
 ---
 
 # Multi-Agent Architecture
 
-## Orchestrating Complex Workflows
-
-<div style="text-align: center;">
-  <img src="../assets/multi-agent-systems.png" alt="Multi-Agent System Architecture" style="width: 50%;">
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/multi-agent-systems.png" alt="Multi-Agent System" style="width: 48%; border: 2px solid #000;">
 </div>
 
 ---
 
-# Multi-Agent Architecture
+# Agents as Tools (Sub-Agent Pattern)
 
-## Architecture Benefits:
-- **Specialization** - Each agent excels at specific tasks
-- **Coordination** - Central orchestration prevents chaos
-- **Scalability** - Add agents without changing core logic
-
----
-# Multi-Agent Architecture
+Instead of handoffs, you can use agents **as tools** for more controlled orchestration:
 
 ```python
-from agents import Agent, Runner
+from agents import Agent, Runner, function_tool
 
-# Research agent
-research_agent = Agent(
+researcher = Agent(
     name="Researcher",
-    instructions="Research topics thoroughly using web search",
+    instructions="Research topics using web search",
     tools=[WebSearchTool()]
 )
 
-# Coding agent
-coding_agent = Agent(
-    name="Coder",
-    instructions="Write clean, well-documented code",
-    model="gpt-4o"
-)
+@function_tool
+async def research(query: str) -> str:
+    """Delegate research to a specialized agent"""
+    result = await Runner.run(researcher, query)
+    return result.final_output
 
-# Coordinator agent
 coordinator = Agent(
     name="Coordinator",
-    instructions="""
-    Coordinate research and coding tasks:
-    1. Use researcher for gathering information
-    2. Use coder for implementation
-    3. Ensure quality and completeness
-    """,
-    handoffs=[research_agent, coding_agent]
+    instructions="Use the research tool to gather info, then synthesize",
+    tools=[research]
 )
 ```
+
+<div class="callout">
+<strong>Handoffs vs Tools:</strong> Handoffs transfer full control; agent-as-tool keeps the coordinator in charge.
+</div>
+
+.footnote[Notebook 05 &mdash; Capstone (Sub-agent pattern)]
+
+---
+
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Multi-Agent Handoffs & Orchestration
+
+Notebook `03-multi-agent-patterns.ipynb`
+
+---
+
+class: section
+
+# Guardrails, Sessions & Tracing
+
+### Safety, State & Observability
+
+---
+
+# Guardrails
+
+<div style="text-align: center; margin: 12px 0;">
+  <img src="../assets/agent-guardrails.png" alt="Agent Guardrails" style="width: 48%; border: 2px solid #000;">
+</div>
+
+<div class="card-row">
+<div class="card" style="border-left: 4px solid #E86B5A;">
+  <strong>Input Guardrails</strong><br>Validate & filter incoming requests
+</div>
+<div class="card" style="border-left: 4px solid #7CB56B;">
+  <strong>Output Guardrails</strong><br>Sanitize & verify agent responses
+</div>
+</div>
+
+.footnote[Notebook 04 &mdash; Guardrails, Sessions, Tracing, MCP]
+
+---
+
+# Guardrails in Code
+
+```python
+from agents import Agent, input_guardrail, output_guardrail
+from agents import GuardrailFunctionOutput, InputGuardrailTripwireTriggered
+
+@input_guardrail
+async def check_math_homework(ctx, agent, input_data):
+    """Prevent the agent from solving homework directly"""
+    result = await Runner.run(
+        homework_detector_agent, input_data, context=ctx.context
+    )
+    return GuardrailFunctionOutput(
+        output_info=result.final_output,
+        tripwire_triggered=result.final_output.is_homework
+    )
+
+agent = Agent(
+    name="MathTutor",
+    instructions="Help students understand math concepts",
+    input_guardrails=[check_math_homework]
+)
+```
+
+<div class="callout alert">
+<strong>Tripwires</strong> raise <code>InputGuardrailTripwireTriggered</code> to stop execution when dangerous input is detected.
+</div>
+
+---
+
+# Tracing Agent Workflows
+
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/agent-tracing.png" alt="Agent Tracing" style="width: 48%; border: 2px solid #000;">
+</div>
+
+**Tracing provides:**
+- **Debugging** &mdash; See exact execution path and timing
+- **Performance** &mdash; Identify bottlenecks in agent workflows
+- **Monitoring** &mdash; Track success/failure patterns in production
+
+---
+
+# Tracing in Code
+
+```python
+from agents import trace
+
+async def process_customer_request(query: str):
+    with trace("customer_workflow"):
+
+        # Step 1: Analyze
+        with trace("analyze"):
+            analysis = await Runner.run(analyzer_agent, query)
+
+        # Step 2: Route to specialist
+        with trace("route"):
+            response = await Runner.run(router_agent, analysis)
+
+        # Step 3: Format response
+        with trace("format"):
+            final = await Runner.run(formatter_agent, response)
+
+        return final
+```
+
+<div class="callout">
+<strong>Traces are visible</strong> in the OpenAI dashboard under the Traces tab, giving you full observability.
+</div>
+
+.footnote[Source: [Tracing Guide](https://openai.github.io/openai-agents-python/tracing/)]
+
+---
+
+# Sessions: Persistent Memory
+
+Sessions automatically maintain conversation history across multiple runs:
+
+```python
+from agents import SQLiteSession
+
+session = SQLiteSession(
+    session_id="user_alice_123",
+    db_path="conversations.db"
+)
+
+# First message
+result = await Runner.run(assistant, "My name is Alice, I love hiking.", session=session)
+
+# Second message — remembers the first!
+result = await Runner.run(assistant, "What's my favorite hobby?", session=session)
+# → "Your favorite hobby is hiking!"
+```
+
+<div class="card-row">
+<div class="card" style="border-left: 4px solid #F5C542;">
+  <strong>Same session</strong> = shared memory
+</div>
+<div class="card" style="border-left: 4px solid #5B9BD5;">
+  <strong>Different session</strong> = isolated memory
+</div>
+</div>
+
+<div class="callout tip">
+<strong>Context vs Session:</strong> Context is local state for tools (not sent to LLM). Session is conversation history (sent to LLM).
+</div>
+
+---
+
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Guardrails, Sessions & Tracing
+
+Notebook `04-guardrails-sessions-tracing-mcp.ipynb`
+
+---
+
+# Human-in-the-Loop Pattern
+
+For high-stakes actions, require human approval before execution:
+
+```python
+@function_tool
+def request_refund_approval(order_id: str, amount: float, reason: str) -> str:
+    """Request approval for a refund. Returns a request ID."""
+    request_id = str(uuid.uuid4())[:8]
+    PENDING_APPROVALS[request_id] = {
+        "order_id": order_id, "amount": amount, "status": "pending"
+    }
+    return f"Refund request {request_id} created. Awaiting manager approval."
+
+refund_agent = Agent(
+    name="RefundAgent",
+    instructions="""Process refund requests:
+    1. First request approval using request_refund_approval
+    2. Inform customer approval is pending
+    3. Never process refunds without approval""",
+    tools=[request_refund_approval, check_approval_status]
+)
+```
+
+<div class="callout alert">
+<strong>Key principle:</strong> Agents should request, not execute, irreversible actions.
+</div>
+
+---
+
+class: section
+
+# MCP Integration
+
+### Model Context Protocol
+
+---
+
+# What is MCP?
+
+<div class="cols">
+<div class="col">
+
+### Model Context Protocol
+
+- **Open protocol** for connecting AI to data sources
+- **Standardized interface** for tool integration
+- **Secure context sharing** between apps
+
+### Transport Types
+
+| Type | Use Case |
+|------|----------|
+| `MCPServerStdio` | Local process |
+| `MCPServerSse` | Remote SSE |
+| `MCPServerStreamableHttp` | HTTP stream |
+
+</div>
+<div class="col">
+
+### Available MCP Servers
+
+- `mcp-server-filesystem` &mdash; File ops
+- `mcp-server-git` &mdash; Git repository
+- `mcp-server-github` &mdash; GitHub API
+- `mcp-server-sqlite` &mdash; Database
+- `mcp-server-google-maps` &mdash; Maps
+- And many more...
+
+</div>
+</div>
+
+> "MCP bridges the gap between AI agents and real-world systems"
+
+.footnote[Source: [MCP Documentation](https://openai.github.io/openai-agents-python/mcp/)]
+
+---
+
+# MCP in Code
+
+```python
+from agents import Agent, Runner
+from agents.mcp import MCPServerStdio
+
+# Connect to a local MCP server
+async with MCPServerStdio(
+    command="npx",
+    args=["-y", "@modelcontextprotocol/server-filesystem", "/Users/data"]
+) as mcp_server:
+
+    # MCP tools are auto-discovered
+    agent = Agent(
+        name="FileAgent",
+        instructions="Help users manage files",
+        mcp_servers=[mcp_server]
+    )
+
+    result = await Runner.run(agent, "List all Python files")
+    print(result.final_output)
+```
+
+<div class="callout tip">
+<strong>Auto-discovery:</strong> MCP servers expose their tools automatically &mdash; no need to define them manually.
+</div>
+
+.footnote[Notebook 04 &mdash; Guardrails, Sessions, Tracing, MCP]
+
+---
+
+# Using Non-OpenAI Models via LiteLLM
+
+The SDK supports **any LLM provider** through the LiteLLM integration:
+
+```python
+from agents.extensions.models.litellm_model import LitellmModel
+
+agent = Agent(
+    name="ClaudeAgent",
+    instructions="You are a helpful assistant",
+    model=LitellmModel(
+        model="anthropic/claude-sonnet-4-20250514"
+    )
+)
+```
+
+<div class="card-row">
+<div class="card" style="border-left: 4px solid #E86B5A;">
+  <strong>Anthropic</strong><br><code>anthropic/claude-*</code>
+</div>
+<div class="card" style="border-left: 4px solid #5B9BD5;">
+  <strong>Google</strong><br><code>gemini/gemini-*</code>
+</div>
+<div class="card" style="border-left: 4px solid #7CB56B;">
+  <strong>Open Source</strong><br><code>ollama/llama3</code>
+</div>
+</div>
+
+---
+
+class: section
+
+# Capstone Project
+
+### Customer Service Agent System
+
+---
+
+# Capstone Architecture
+
+A multi-agent customer service system combining everything we've learned:
+
+<div style="margin: 16px 0;">
+<div style="display: flex; gap: 16px; flex-wrap: wrap;">
+
+<div class="card" style="flex: 1; min-width: 200px; border-left: 4px solid #E86B5A;">
+  <h3>Triage Agent</h3>
+  Routes incoming queries to the right specialist
+</div>
+
+<div class="card" style="flex: 1; min-width: 200px; border-left: 4px solid #F5C542;">
+  <h3>Sales Agent</h3>
+  Handles product inquiries and recommendations
+</div>
+
+<div class="card" style="flex: 1; min-width: 200px; border-left: 4px solid #5B9BD5;">
+  <h3>Support Agent</h3>
+  Resolves technical issues and troubleshooting
+</div>
+
+<div class="card" style="flex: 1; min-width: 200px; border-left: 4px solid #7CB56B;">
+  <h3>Refund Agent</h3>
+  Processes returns and refund requests
+</div>
+
+</div>
+</div>
+
+**Combines:** Agents + Tools + Handoffs + Context + Guardrails
+
+.footnote[Notebook 05 &mdash; Capstone Customer Service Agent]
+
+---
+
+# Capstone: Pattern Summary
+
+| Pattern | Where Used |
+|---------|-----------|
+| **Agent Creation** | Each specialist agent with unique instructions |
+| **Function Tools** | Order lookup, refund processing, product search |
+| **Structured Output** | Typed responses for order data |
+| **Handoffs** | Triage &rarr; Sales / Support / Refund routing |
+| **Context** | Customer session with order history |
+| **Guardrails** | Input validation, PII protection |
+| **Tracing** | End-to-end workflow visibility |
+
+<div class="callout success">
+<strong>This capstone ties together all concepts</strong> from notebooks 00&ndash;04 into a production-style system.
+</div>
+
+---
+
+class: demo
+
+<div class="demo-badge">LIVE DEMO</div>
+
+# Building the Customer Service System
+
+Notebook `05-capstone-customer-service.ipynb`
 
 ---
 
 # Scaling Best Practices
 
-<div style="display: flex; gap: 40px; justify-content: center;">
-  <div style="flex: 1; min-width: 220px;">
-    <h3>Architecture</h3>
-    <ul>
-      <li>Single coordinator pattern</li>
-      <li>Clear agent responsibilities</li>
-      <li>Minimal handoff chains</li>
-      <li>Stateless when possible</li>
-    </ul>
-  </div>
-  <div style="flex: 1; min-width: 220px;">
-    <h3>Safety</h3>
-    <ul>
-      <li>Input validation at entry</li>
-      <li>Output sanitization</li>
-      <li>Rate limiting</li>
-      <li>Timeout controls</li>
-    </ul>
-  </div>
+<div class="cols">
+<div class="col">
+
+### Architecture
+
+<div style="border: 2px solid #000; background: white; padding: 16px;">
+
+- Single coordinator pattern
+- Clear agent responsibilities
+- Minimal handoff chains
+- Stateless when possible
+- Use agents-as-tools for control
+
+</div>
+</div>
+<div class="col">
+
+### Safety & Production
+
+<div style="border: 2px solid #000; background: white; padding: 16px;">
+
+- Input validation at entry points
+- Output sanitization always
+- Rate limiting per user
+- Timeout controls on all runs
+- Tracing for observability
+
+</div>
+</div>
 </div>
 
-```python
-# Production multi-agent setup
-coordinator = Agent(
-    name="SafeCoordinator",
-    instructions="Coordinate safely with timeouts",
-    handoffs=[agent1, agent2],
-    input_guardrails=[validate_input],
-    output_guardrails=[sanitize_output]
-)
-
-# Run with timeout
-result = await Runner.run(coordinator, query, timeout=60)
-```
-
-.footnote[Source: [Multi-Agent Systems](https://openai.github.io/openai-agents-python/multi_agent/)]
-
----
-
-class: center, middle
-
-# <h1><span style="background-color: lightgreen">Demo: Building a Multi-Agent System for Research and Coding</span></h1>
-
----
-
-class: inverse, center, middle
-
-# Key Takeaways
+<div style="text-align: center; margin-top: 20px;">
+  <img src="../assets/best-practices.png" alt="Best Practices" style="width: 40%; border: 2px solid #000;">
+</div>
 
 ---
 
 # Your Learning Journey
 
-<div style="text-align: center;">
-  <img src="../assets/journey-map.png" alt="Journey Map" style="width: 50%;">
+<div style="text-align: center; margin: 16px 0;">
+  <img src="../assets/journey-map.png" alt="Learning Journey Map" style="width: 48%; border: 2px solid #000;">
 </div>
 
-✅ **Agents add actions** to language models
-
-✅ **SDK provides** production-ready patterns
-
-✅ **Start simple**, add complexity gradually
-
-✅ **Tools unlock** real-world integration
+<div class="card-row">
+<div class="card" style="border-left: 4px solid #E86B5A; text-align: center;">
+  <strong>Agent Loop</strong><br>Foundation
+</div>
+<div class="card" style="border-left: 4px solid #F5C542; text-align: center;">
+  <strong>Tools & Output</strong><br>Capabilities
+</div>
+<div class="card" style="border-left: 4px solid #7CB56B; text-align: center;">
+  <strong>Multi-Agent</strong><br>Orchestration
+</div>
+<div class="card" style="border-left: 4px solid #5B9BD5; text-align: center;">
+  <strong>Production</strong><br>Safety & Scale
+</div>
+</div>
 
 ---
 
-# Connect With Me
+# Key Takeaways
 
-## 📚 [Course materials]()
-## 🔗 [LinkedIn](https://www.linkedin.com/in/lucas-soares-969044167/)
-## 🐦 [Twitter/X - @LucasEnkrateia](https://x.com/LucasEnkrateia)
-## 📺 [YouTube - @automatalearninglab](https://www.youtube.com/@automatalearninglab)
-## 📧 Email: lucasenkrateia@gmail.com
+<div style="margin-top: 16px;">
+
+<div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+  <span style="background: #7CB56B; color: white; padding: 2px 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">1</span>
+  <span><strong>Agents add actions</strong> to language models &mdash; they perceive, decide, and act</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+  <span style="background: #7CB56B; color: white; padding: 2px 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">2</span>
+  <span><strong>The SDK provides</strong> production-ready patterns for tools, handoffs, and guardrails</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+  <span style="background: #7CB56B; color: white; padding: 2px 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">3</span>
+  <span><strong>Start simple</strong>, add complexity gradually &mdash; agent &rarr; tools &rarr; multi-agent &rarr; guardrails</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+  <span style="background: #7CB56B; color: white; padding: 2px 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">4</span>
+  <span><strong>MCP unlocks</strong> real-world integrations through a standardized protocol</span>
+</div>
+
+<div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+  <span style="background: #7CB56B; color: white; padding: 2px 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">5</span>
+  <span><strong>Tracing and guardrails</strong> are essential for production-ready agent systems</span>
+</div>
+
+</div>
 
 ---
 
 # Resources & Documentation
 
-### Official Documentation
-- [OpenAI Agents Python SDK](https://openai.github.io/openai-agents-python/)
+<div class="cols">
+<div class="col">
+
+### Official Docs
+
+- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
 - [Quickstart Guide](https://openai.github.io/openai-agents-python/quickstart/)
 - [API Reference](https://openai.github.io/openai-agents-python/ref/)
+- [MCP Documentation](https://openai.github.io/openai-agents-python/mcp/)
 
-### Practical Resources
+### Guides
+
 - [Building Agents Manual (PDF)](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf)
-- [GitHub Examples](https://github.com/openai/openai-agents-python/tree/main/examples)
 - [Model Selection Guide](https://cookbook.openai.com/examples/partners/model_selection_guide/model_selection_guide)
 
+</div>
+<div class="col">
+
+### Code & Examples
+
+- [GitHub Repo & Examples](https://github.com/openai/openai-agents-python/tree/main/examples)
+- SDK Reference Doc (included in `assets/`)
+
 ### Video Tutorials
+
 - [Building Agents Tutorial](https://youtu.be/35nxORG1mtg)
 - [Architecture Deep Dive](https://www.youtube.com/watch?v=-rsTkYgnNzM)
 
+</div>
+</div>
+
 ---
 
-class: center, middle, inverse
+# Connect With Me
+
+<div style="margin-top: 24px;">
+
+<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: white; border: 2px solid #000;">
+  <span class="tag tag-sky" style="margin: 0;">LinkedIn</span>
+  <a href="https://www.linkedin.com/in/lucas-soares-969044167/">linkedin.com/in/lucas-soares</a>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: white; border: 2px solid #000;">
+  <span class="tag tag-coral" style="margin: 0;">Twitter/X</span>
+  <a href="https://x.com/LucasEnkrateia">@LucasEnkrateia</a>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: white; border: 2px solid #000;">
+  <span class="tag tag-sage" style="margin: 0;">YouTube</span>
+  <a href="https://www.youtube.com/@automatalearninglab">@automatalearninglab</a>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: white; border: 2px solid #000;">
+  <span class="tag tag-golden" style="margin: 0;">Email</span>
+  <span>lucasenkrateia@gmail.com</span>
+</div>
+
+</div>
+
+---
+
+class: cover
 
 # Thank You!
 
+<div class="brand-bar">
+  <span style="background: #E86B5A"></span>
+  <span style="background: #F5C542"></span>
+  <span style="background: #7CB56B"></span>
+  <span style="background: #5B9BD5"></span>
+</div>
+
 ## Start Building Today
 
-```bash
-pip install openai-agents
-```
+### `pip install openai-agents`
 
-### Questions?
-
-#### Contact & Community
-[GitHub Discussions](https://github.com/openai/openai-agents-python) | [Documentation](https://openai.github.io/openai-agents-python/)
+<div style="margin-top: 24px; color: #8A847A; font-size: 16px;">
+  <a href="https://github.com/openai/openai-agents-python" style="color: #DDD9D2; border-bottom-color: #5C5750;">GitHub</a> &nbsp;&bull;&nbsp;
+  <a href="https://openai.github.io/openai-agents-python/" style="color: #DDD9D2; border-bottom-color: #5C5750;">Documentation</a> &nbsp;&bull;&nbsp;
+  <a href="https://github.com/openai/openai-agents-python/discussions" style="color: #DDD9D2; border-bottom-color: #5C5750;">Community</a>
+</div>
 
     </textarea>
-    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
-    </script>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
     <script>
-      var slideshow = remark.create();
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightStyle: 'github',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false
+        }
+      });
     </script>
   </body>
 </html>
