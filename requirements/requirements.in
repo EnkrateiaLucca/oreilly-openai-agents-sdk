@@ -1,7 +1,7 @@
 ipykernel
-openai-agents
-openai-agents[viz]
-openai-agents[voice]
+openai-agents>=0.9.1
+openai-agents[viz]>=0.9.1
+openai-agents[voice]>=0.9.1
 asyncio
 matplotlib
 pandas
