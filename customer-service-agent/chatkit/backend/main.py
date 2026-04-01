@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from chatkit.server import StreamingResult
@@ -33,6 +34,18 @@ FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 @app.post("/chatkit")
 async def chatkit_endpoint(request: Request) -> Response:
     """Single endpoint that handles ALL ChatKit operations (read + stream)."""
+
+    # BYOK: read the user-supplied API key from the request header.
+    # Falls back to the server's env var if no header is sent (local dev).
+    api_key = request.headers.get("x-openai-api-key") or os.environ.get(
+        "OPENAI_API_KEY"
+    )
+    if not api_key:
+        return JSONResponse(
+            {"error": "Missing OpenAI API key. Please enter your key in the app."},
+            status_code=401,
+        )
+    os.environ["OPENAI_API_KEY"] = api_key
 
     # Build request context with customer info.
     # For the demo we default to Alice; pass ?customer=CUST-456 for Bob.

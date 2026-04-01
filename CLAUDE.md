@@ -1,55 +1,105 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working on this repository.
 
 ## Project Overview
 
-O'Reilly Live Training course teaching AI agent development with the OpenAI Agents SDK. The content is delivered through sequential Jupyter notebooks (00 through 05) plus a capstone project, with supporting assets and a presentation.
+O'Reilly Live Training course: **Building AI Agents with OpenAI's Agents SDK**. Progressive Jupyter notebooks (00–05) teach agent fundamentals through a capstone, plus two standalone demo apps. SDK version: `openai-agents==0.13.3`. Primary model: `gpt-4.1`, secondary: `gpt-5-mini`.
 
-## Environment Setup
+## Environment
 
 ```bash
-# Full setup (conda + deps + Jupyter kernel)
-make all
-
-# Or manually:
+make all                    # Full setup: conda env + deps + Jupyter kernel
 conda activate openai-agents-sdk
-pip install openai-agents
-
-# Update dependencies
-make env-update
+make env-update             # Recompile & sync deps
 ```
 
-- Conda env name: `openai-agents-sdk` (Python 3.11)
-- Dependency management: `uv` with pip-compile (`requirements/requirements.in` → `requirements.txt`)
-- Requires `OPENAI_API_KEY` environment variable
+- **Python 3.11** via conda env `openai-agents-sdk`
+- **Deps**: `uv` with pip-compile (`requirements/requirements.in` → `requirements.txt`)
+- **Required env var**: `OPENAI_API_KEY`
+- **Optional**: Google OAuth creds for Sheets/Calendar/Gmail integrations in notebook 04
 
-## Repository Structure
+## Repository Map
 
-- `notebooks/` — Core course content as Jupyter notebooks (numbered 00–05 for sequential progression)
-  - 00: Agent loop fundamentals
-  - 01: Agents and tools
-  - 02: Structured output and context
-  - 03: Multi-agent patterns (handoffs)
-  - 04: Guardrails, sessions, tracing, MCP
-  - 05: Capstone — customer service agent
-- `assets/` — Diagrams, cheatsheets (PDF), and SDK documentation reference (`openai-agents-sdk-docs-llmstxt.txt`)
-- `presentation/` — Course presentation materials
-- `scripts/` — Standalone Python scripts (currently empty)
-- `requirements/` — Dependency files managed via uv/pip-compile
+```
+notebooks/                   # Core course content (run sequentially)
+  00-agent-loop.ipynb        # Agent loop concept, single vs iterative execution
+  01-agents-and-tools.ipynb  # Agent definitions, @function_tool decorator
+  02-structured-output-and-context.ipynb  # Pydantic output models, RunContextWrapper
+  03-multi-agent-patterns.ipynb          # Handoffs (decentralized) vs Agents-as-Tools (centralized)
+  04-guardrails-sessions-tracing-mcp.ipynb  # InputGuardrail, OutputGuardrail, SQLiteSession, tracing, MCP servers
+  05-capstone-customer-service.ipynb     # Full multi-agent customer service system
 
-## Key SDK Patterns Used
+demos/customer-service/      # Chainlit demo app
+  app.py                     # Entry point — `chainlit run app.py`
+  agents_def.py              # 4 agents: Triage, OrderSpecialist, RefundSpecialist, AbuseDetector
+  tools.py                   # lookup_order, list_customer_orders, calculate_refund, process_refund
+  models.py                  # Pydantic models (AbuseCheck, RefundDecision, OrderStatus, CustomerContext)
+  config.py                  # Mock databases + constants
 
-The notebooks use `openai-agents` SDK with these core imports:
-- `from agents import Agent, Runner, function_tool` — agent creation and execution
-- `Runner.run_sync()` for synchronous, `Runner.run()` for async, `Runner.run_streamed()` for streaming
-- `from agents import InputGuardrail, OutputGuardrail` — input/output validation
-- `from agents.extensions.models.litellm_model import LitellmModel` — non-OpenAI model providers
-- MCP integration via `MCPServerStdio`, `MCPServerSse`, `MCPServerStreamableHttp`
+customer-service-agent/chatkit/  # ChatKit (production UI) demo
+  backend/                   # FastAPI — `uvicorn backend.main:app --reload --port 8000`
+    main.py, server.py, agents.py, store.py
+  frontend/                  # React/Vite — `npm run dev` on port 5173
+  run.sh                     # One-command launcher for both
+
+assets/
+  openai-agents-sdk-docs-llmstxt.txt  # Full SDK docs reference (use this for SDK questions)
+  oai-ag-sdk-cheatsheet.pdf           # Quick-reference cheatsheet
+  oai-agents-sdk-nuances.pdf          # SDK subtleties & best practices
+  resources.md                        # External links and references
+  *.png                               # 10 architecture/concept diagrams
+
+presentation/                # Slides (PDF + HTML)
+requirements/                # requirements.in (source) → requirements.txt (locked)
+scripts/                     # Reserved for standalone scripts (currently empty)
+```
+
+## Key SDK Patterns
+
+```python
+# Core imports used across notebooks
+from agents import Agent, Runner, function_tool
+from agents import InputGuardrail, OutputGuardrail, GuardrailFunctionOutput
+from agents import RunContextWrapper, InputGuardrailTripwireTriggered
+from agents import SQLiteSession                          # Persistent conversation memory
+from agents.extensions.models.litellm_model import LitellmModel  # Non-OpenAI providers
+
+# Execution modes
+Runner.run_sync(agent, input)          # Synchronous
+await Runner.run(agent, input)         # Async
+Runner.run_streamed(agent, input)      # Streaming
+
+# MCP integration
+from agents.mcp import MCPServerStdio, MCPServerSse, MCPServerStreamableHttp
+```
+
+## Multi-Agent Architecture (Demo Apps)
+
+Both demos share the same agent graph:
+```
+User → TriageAgent → OrderSpecialist (lookup_order, list_customer_orders)
+                   → RefundSpecialist (calculate_refund, process_refund)
+       AbuseDetector (InputGuardrail on TriageAgent)
+```
+- Chainlit demo: rapid prototyping UI, SQLite sessions, streaming
+- ChatKit demo: production React frontend, FastAPI backend, OpenAI ChatKit protocol
 
 ## Development Notes
 
-- All code runs in notebooks; there are no standalone `.py` modules to test
-- When adding new notebooks, follow the numbered naming convention: `NN-description.ipynb`
-- The SDK reference doc is available locally at `assets/openai-agents-sdk-docs-llmstxt.txt`
-- Google API integrations (Sheets, Calendar, Gmail) require additional OAuth credentials
+- No test suite — all code runs in notebooks or demo apps
+- Follow `NN-description.ipynb` naming for new notebooks
+- SDK docs available locally: `assets/openai-agents-sdk-docs-llmstxt.txt`
+- Demo apps generate SQLite DBs at runtime (gitignored)
+- `openai-agents[viz]` installed for agent graph visualization (graphviz)
+- `openai-agents[voice]` installed for voice/audio capabilities
+
+## Course Improvement Checklist
+
+When improving this course, consider:
+- Are notebook explanations clear for the progression level?
+- Do code cells have markdown context before them explaining the "why"?
+- Are SDK patterns consistent across notebooks (same model, same import style)?
+- Does the capstone (05) actually exercise patterns from all prior notebooks?
+- Are the demo apps up to date with the SDK version used in notebooks?
+- Do assets/diagrams match current notebook content?
