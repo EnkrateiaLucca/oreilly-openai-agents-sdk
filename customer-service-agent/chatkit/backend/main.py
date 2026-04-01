@@ -2,16 +2,22 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 
+from agents import InputGuardrailTripwireTriggered, Runner
 from chatkit.server import StreamingResult
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+from openai.types.responses import ResponseTextDeltaEvent
+from pydantic import BaseModel
 
-from .agents import CUSTOMERS_DB, CustomerContext
+from .agents import CUSTOMERS_DB, CustomerContext, triage_agent
 from .server import CustomerServiceServer
 
 app = FastAPI(title="Customer Service ChatKit API")
@@ -67,6 +73,52 @@ async def chatkit_endpoint(request: Request) -> Response:
     if hasattr(result, "json"):
         return Response(content=result.json, media_type="application/json")
     return JSONResponse(result)
+
+
+class ChatRequest(BaseModel):
+    message: str
+    api_key: str
+    history: list[dict[str, Any]] = []
+
+
+@app.post("/api/chat")
+async def api_chat(body: ChatRequest) -> StreamingResponse:
+    """Simple streaming chat endpoint for the React frontend."""
+    os.environ["OPENAI_API_KEY"] = body.api_key
+
+    # Default to Alice for the demo
+    cust = CUSTOMERS_DB["CUST-123"]
+    customer = CustomerContext(
+        customer_id="CUST-123",
+        customer_name=cust["name"],
+        is_premium=cust["is_premium"],
+    )
+
+    # Build conversation input: include history + new message
+    agent_input = [
+        {"role": msg["role"], "content": msg["content"]}
+        for msg in body.history
+        if msg.get("content")
+    ] + [{"role": "user", "content": body.message}]
+
+    # Tools expect wrapper.context.request_context = {"customer": ...}
+    agent_context = SimpleNamespace(request_context={"customer": customer})
+
+    async def stream():
+        try:
+            result = Runner.run_streamed(triage_agent, agent_input, context=agent_context)
+            full_text = ""
+            async for event in result.stream_events():
+                if event.type == "raw_response_event" and isinstance(
+                    event.data, ResponseTextDeltaEvent
+                ):
+                    full_text += event.data.delta
+                    yield f"data: {json.dumps({'text': full_text})}\n\n"
+        except InputGuardrailTripwireTriggered:
+            yield f"data: {json.dumps({'error': 'Message flagged as inappropriate. Please rephrase.'})}\n\n"
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(stream(), media_type="text/event-stream")
 
 
 # Serve the built React frontend in production

@@ -82,12 +82,13 @@ export function Chat({ apiKey, onClearKey }: { apiKey: string; onClearKey: () =>
                 };
                 return updated;
               });
-            } else if (parsed.delta) {
+            } else if (parsed.text) {
+              // `text` is the full message so far (not incremental)
               setMessages((prev) => {
                 const updated = [...prev];
                 updated[updated.length - 1] = {
                   role: "assistant",
-                  content: updated[updated.length - 1].content + parsed.delta,
+                  content: parsed.text,
                 };
                 return updated;
               });
